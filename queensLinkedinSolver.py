@@ -165,10 +165,8 @@ def getInputArr( stdscr, grid_dim ):
                curses.color_pair( text_color ) | curses.A_BOLD
             )
             stdscr.addstr(
-               1, 0,
-               "Please expand your window to at least " +
-               f"{needed_width}x{needed_height}.",
-               curses.color_pair( text_color )
+               1, 0, "Please expand your window to at least " +
+               f"{needed_width}x{needed_height}.", curses.color_pair( text_color )
             )
             stdscr.addstr(
                2, 0, f"Current size: {max_x}x{max_y}",
