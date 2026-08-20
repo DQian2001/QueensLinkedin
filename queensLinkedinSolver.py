@@ -2,17 +2,12 @@ import curses
 import numpy as np
 import sys
 
-class Board( object ):
+class Board:
    crossedOutSymbol = -1
 
    def __init__( self, board, currWorkingRow=0 ):
       self.board = board
       self.currWorkingRow = currWorkingRow
-
-   def __str__( self ):
-      strText = str( self.board )
-      breakpoint()
-      return strText.replace( "-1", ' *' )
 
    def autoPlaceX( self, board, location ):
       i, j = location
@@ -151,6 +146,7 @@ def getInputArr( stdscr, grid_dim ):
    MENU_X_START = ( grid_dim * CELL_WIDTH ) + 4
    is_drawing = False
 
+   # pylint: disable=too-many-nested-blocks
    while True:
       stdscr.clear()
 
@@ -170,7 +166,8 @@ def getInputArr( stdscr, grid_dim ):
             )
             stdscr.addstr(
                1, 0,
-               f"Please expand your window to at least {needed_width}x{needed_height}.",
+               "Please expand your window to at least " +
+               f"{needed_width}x{needed_height}.",
                curses.color_pair( text_color )
             )
             stdscr.addstr(
@@ -220,17 +217,20 @@ def getInputArr( stdscr, grid_dim ):
       key = stdscr.getch()
 
       if key == ord( 'q' ):
-         # Clean up: Tell terminal to turn OFF high-frequency mouse tracking before exiting
+         # Clean up: Tell terminal to turn OFF
+         # high-frequency mouse tracking before exiting
          sys.stdout.write( "\x1b[?1003l" )
          sys.stdout.flush()
          return np.unique( array_2d, return_inverse=True )[ 1 ]
 
       if key == ord( '\t' ):
-         # Increment selection, then use modulo to wrap back to 0 if it goes past the end.
+         # Increment selection, then use modulo to
+         # wrap back to 0 if it goes past the end.
          active_color_pair = ( active_color_pair + 1 ) % menu_dim
          continue
       if key == curses.KEY_BTAB:
-         # Decrement selection, then use modulo to wrap back to end if it goes past 0.
+         # Decrement selection, then use modulo to
+         # wrap back to end if it goes past 0.
          active_color_pair = ( active_color_pair - 1 ) % menu_dim
 
       if key == curses.KEY_MOUSE:
@@ -245,7 +245,7 @@ def getInputArr( stdscr, grid_dim ):
                if mx >= MENU_X_START:
                   for idx, info in enumerate( MENU_COLORS ):
                      slot_y_start = slotYStart( idx )
-                     if my == slot_y_start or my == slot_y_start + 1:
+                     if slot_y_start <= my <= slot_y_start + 1:
                         active_color_pair = idx
                         break
             elif bstate & curses.BUTTON1_RELEASED:
