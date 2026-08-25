@@ -175,10 +175,6 @@ def getInputArr( stdscr, grid_dim ):
          except curses.error:
             pass  # absolute fallback if the window is truly microscopic
 
-         stdscr.refresh()
-         key = stdscr.getch()
-         if key == ord( 'q' ):
-            return np.unique( array_2d, return_inverse=True )[ 1 ]
          continue  # Skip rendering the grid until they resize it larger
 
       # 1. DRAW GRID (Safe inside boundaries)
@@ -219,7 +215,8 @@ def getInputArr( stdscr, grid_dim ):
          # high-frequency mouse tracking before exiting
          sys.stdout.write( "\x1b[?1003l" )
          sys.stdout.flush()
-         return np.unique( array_2d, return_inverse=True )[ 1 ]
+         return np.unique( array_2d, return_inverse=True )[ 1 ] \
+            .reshape( array_2d.shape )
 
       if key == ord( '\t' ):
          # Increment selection, then use modulo to
