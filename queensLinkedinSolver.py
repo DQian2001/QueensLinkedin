@@ -89,7 +89,6 @@ def main():
 
 def getInputArr( stdscr, grid_dim ):
    curses.curs_set( 0 )
-   stdscr.clear()
 
    # 1. Enable ALL mouse events and motion reporting
    curses.mousemask( curses.ALL_MOUSE_EVENTS | curses.REPORT_MOUSE_POSITION )
@@ -174,8 +173,6 @@ def getInputArr( stdscr, grid_dim ):
             )
          except curses.error:
             pass  # absolute fallback if the window is truly microscopic
-
-         stdscr.refresh()
          continue  # Skip rendering the grid until they resize it larger
 
       # 1. DRAW GRID (Safe inside boundaries)
@@ -210,7 +207,6 @@ def getInputArr( stdscr, grid_dim ):
 
       # 3. MOUSE & KEYBOARD INPUT
       key = stdscr.getch()
-
       if key == ord( 'q' ):
          # Clean up: Tell terminal to turn OFF
          # high-frequency mouse tracking before exiting
@@ -218,7 +214,6 @@ def getInputArr( stdscr, grid_dim ):
          sys.stdout.flush()
          return np.unique( array_2d, return_inverse=True )[ 1 ] \
             .reshape( array_2d.shape )
-
       if key == ord( '\t' ):
          # Increment selection, then use modulo to
          # wrap back to 0 if it goes past the end.
@@ -228,7 +223,7 @@ def getInputArr( stdscr, grid_dim ):
          # Decrement selection, then use modulo to
          # wrap back to end if it goes past 0.
          active_color_pair = ( active_color_pair - 1 ) % menu_dim
-
+         continue
       if key == curses.KEY_MOUSE:
          try:
             _, mx, my, _, bstate = curses.getmouse()
@@ -248,9 +243,9 @@ def getInputArr( stdscr, grid_dim ):
                is_drawing = False
             if is_drawing and insideGrid:
                array_2d[ clicked_row, clicked_col ] = active_color_pair
-               continue
          except curses.error:
             pass
+         continue
 
 if __name__ == "__main__":
    main()
