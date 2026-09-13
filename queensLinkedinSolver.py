@@ -160,7 +160,7 @@ def getInputArr( stdscr, grid_dim ):
       if max_x < needed_width or max_y < needed_height:
          try:
             stdscr.addstr(
-               0, 0, "##### SCREEN TOO SMALL!!! #####",
+               0, 0, "⚠️ SCREEN TOO SMALL!",
                curses.color_pair( text_color ) | curses.A_BOLD
             )
             stdscr.addstr(
